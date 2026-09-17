@@ -1,0 +1,66 @@
+Standard Open Phase Input File
+!!!All values in MKS units!!!
+
+@RunTimeControl
+$SimulationTitle       Simulation Title             : 2D polycrystalline PVD with vapor transport
+$MaxTimeStep           Number of Time Steps         : 20000
+$VTKOutputInterval     Output to disk interval      : 500
+$ConsoleOutputInterval Output to screen interval    : 500
+$UnitsOfLength         Units of length              : m
+$UnitsOfTime           Units of time                : s
+$UnitsOfMass           Units of mass                : kg
+$UnitsOfEnergy         Energy units                 : J
+$dt                    Initial Time Step            : 1.0e-8
+$OpenMPThreads         Number of OpenMP Threads     : 1
+$RestartSwitch         Restart switch (Yes/No)      : No
+$StartTimeStep         Start at time step           : 0
+$CheckpointInterval    Restart output interval      : 5000
+
+@GridParameters
+$Nx       System Size in X Direction                : 192
+$Ny       System Size in Y Direction                : 128
+$Nz       System Size in Z Direction                : 0
+$dx       Grid Spacing                              : 2.0e-9
+$IWidth   Interface Width (in grid points)          : 5.0
+$Bcells   Boundary cells                            : 2
+
+@Settings
+$Comp_0   Chemical component 0                      : DepositedMaterial
+$Phase_0  Name of phase 0                           : Vapor
+$State_0  Aggregate state of phase 0                : Gas
+$Phase_1  Name of phase 1                           : Film
+$State_1  Aggregate state of phase 1                : Solid
+$MassDensity_0 Equilibrium density of vapor         : 1.0
+$MassDensity_1 Equilibrium density of film          : 5000.0
+
+@DrivingForce
+# Directional deposition is already local; turning averaging off prevents the
+# incidence-angle field from being smeared along the interface.  Average() is
+# still called by Python because it also initializes OpenPhase's pair weights.
+$Average        Driving force averaging             : No
+$Limiting       Driving force limiting              : Yes
+$Limit_0_1      Driving force cutoff 0 1            : 0.50
+
+@InterfaceProperties
+$EnergyModel_0_0    Interface energy model          : Iso
+$EnergyModel_0_1    Interface energy model          : Iso
+$EnergyModel_1_1    Interface energy model          : Iso
+$Sigma_0_0          Interface energy                : 0.0
+$Sigma_0_1          Vapor-film interface energy     : 1.0
+$Sigma_1_1          Grain-boundary energy           : 0.50
+$ExtrapolationMode  Interface-property extrapolation: FirstOrder
+
+$MobilityModel_0_0  Interface mobility model        : Iso
+$MobilityModel_0_1  Interface mobility model        : Iso
+$MobilityModel_1_1  Interface mobility model        : Iso
+$Mu_0_0             Interface mobility              : 0.0
+$Mu_0_1             Vapor-film interface mobility   : 5.0e-12
+$Mu_1_1             Grain-boundary mobility         : 5.0e-14
+
+@BoundaryConditions
+$BC0X   X axis beginning boundary condition         : Periodic
+$BCNX   X axis far end boundary condition           : Periodic
+$BC0Y   Y axis beginning boundary condition         : NoFlux
+$BCNY   Y axis far end boundary condition           : NoFlux
+$BC0Z   Z axis beginning boundary condition         : NoFlux
+$BCNZ   Z axis far end boundary condition           : NoFlux
